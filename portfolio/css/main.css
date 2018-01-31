@@ -1,0 +1,32 @@
+@media screen and (max-width: 600px) {
+  .header {
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .title {
+    text-align: right;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+.divider {
+  height: 0.2rem;
+  background-color: #7d97ad;
+}
+
+.title {
+  color: #2d3c49;
+}
+
+.feature_title {
+  color: #7d97ad;
+}
+
+.features {
+  color: #2d3c49;
+}
