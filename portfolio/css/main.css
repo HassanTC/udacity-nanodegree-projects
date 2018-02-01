@@ -30,3 +30,8 @@ img {
 .features {
   color: #2d3c49;
 }
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
