@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>FSND Item Catalog</title>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+	<link rel="stylesheet" href="/static/milligram.min.css">
+	<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+	<script>
+		function signInCallback(authResult) {
+			if (authResult['code']) {
+				// Hide the sign-in button now that the user is authorized
+				$('#signinButton').attr('style', 'display: none');
+
+				// Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+				$.ajax({
+					type: 'POST',
+					url: '/gconnect?state={{STATE}}',
+					processData: false,
+					data: authResult['code'],
+					contentType: 'application/octet-stream; charset=utf-8',
+					success: function(result) {
+			        	// Handle or verify the server response if necessary.
+				        if (result) {
+				        	$('#login').html('Logging in...')
+							window.location.href = "/catalog";
+						} else if (authResult['error']) {
+							console.log('There was an error: ' + authResult['error']);
+						} else {
+							$('#login').html('Failed to make a server-side call. Check your configuration and console.');
+						}
+					}
+				});
+			}
+		}
+	</script>
+
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '989725791138292',
+				cookie     : true,  // enable cookies to allow the server to access
+				                    // the session
+				xfbml      : true,  // parse social plugins on this page
+				version    : 'v2.2' // use version 2.2
+			});
+		};
+
+		// Load the SDK asynchronously
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+
+		// Here we run a very simple test of the Graph API after login is
+		// successful.  See statusChangeCallback() for when this call is made.
+		function sendTokenToServer() {
+			var access_token = FB.getAuthResponse()['accessToken'];
+			console.log(access_token)
+			console.log('Welcome!  Fetching your information.... ');
+			FB.api('/me', function(response) {
+				console.log('Successful login for: ' + response.name);
+				$.ajax({
+					type: 'POST',
+					url: '/fbconnect?state={{STATE}}',
+					processData: false,
+					data: access_token,
+					contentType: 'application/octet-stream; charset=utf-8',
+					success: function(result) {
+						// Handle or verify the server response if necessary.
+						if (result) {
+							$('#login').html('Logging in...')
+							window.location.href = "/catalog";
+						} else {
+							$('#login').html('Failed to make a server-side call. Check your configuration and console.');
+						}
+					}
+				});
+			});
+		}
+	</script>
+
+	<div class="wrapper">
+		<header class="header">
+			<div class="container">
+				<a href="/" class="header__title">
+					<h1 class="title__text">Udacity Item Catalog</h1>
+				</a>
+				<div class="header__user">
+					{%if 'username' not in session %}
+					<a href="{{url_for('login')}}" class="user__nav">
+						Login
+					</a>
+					{% else %}
+					<a href="{{url_for('logout')}}" class="user__nav">
+						Logout
+					</a>
+					{% endif %}
+				</div>
+			</div>
+		</header>
+		<div class="content">
+			<div id="login" class="container container--login">
+				<fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();">
+					<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+				</fb:login-button>
+
+				<!-- <button class="login__button login__button--facebook">Login with Facebook</button> -->
+
+				<div class="login__separator">OR</div>
+
+				<div id="signInButton">
+					<span class="g-signin"
+						data-scope="openid email"
+						data-clientid="36437096753-dmhgf4r53e4crtv4c0mduboo4l6hl2dn.apps.googleusercontent.com"
+						data-redirecturi="postmessage"
+						data-accesstype="offline"
+						data-cookiepolicy="single_host_origin"
+						data-callback="signInCallback"
+						data-approvalprompt="force">
+					</span>
+				</div>
+
+				<!-- <button class="login__button login__button--google">Login with Google</button> -->
+			</div>
+		</div>
+	</div>
+</body>
+</html>
