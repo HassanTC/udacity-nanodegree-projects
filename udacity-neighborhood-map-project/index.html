@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hassan Favourite Places - Neighborhood Map</title>
+    <!-- Bootstrap Last varsion CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--Custom CSS-->
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <div class="row no-gutters main">
+      <div class="col-md-2 col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <input
+              data-bind="textInput: keyword, valueUpdate: 'afterkeydown'"
+              placeholder="Filter"
+              class="form-control"
+              name="keyword"
+              type="text"
+            >
+          </div>
+          <ul class="list-group list-group-flush" data-bind="foreach: filtered_list">
+            <li class="list-group-item cursor-pointer" data-bind="text: name, click: show"></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-10 col-sm-6 h-100">
+        <div id="map"></div>
+      </div>
+    </div>
+    <script src='js/lib/knockout-3.4.2.js'></script>
+  	<script src='js/lib/jquery-3.3.1.min.js'></script>
+    <script src='js/mapStyles.js'></script>
+    <script src='js/locations.js'></script>
+    <script src='js/main.js'></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJxjyrzOk4XjCSf8uCLdPcofzodN9_AR8&v=3&callback=main" onerror="GoogleMapsErrorHandler()">
+    </script>
+  </body>
+</html>

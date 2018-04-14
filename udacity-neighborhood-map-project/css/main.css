@@ -1,0 +1,29 @@
+html,
+body,
+.main,
+#map {
+   height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.no-gutters > .col,
+.no-gutters > [class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.main {
+  background-color: #242f3e;
+}
+
+.card {
+  background-color: #242f3e;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
