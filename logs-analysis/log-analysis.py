@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import psycopg2
 
 DBNAME = "news"
@@ -6,7 +8,7 @@ DBNAME = "news"
 most_viewed_articles = (
                         "select articles.title, count(*) as views "
                         "from articles, log "
-                        "where log.path LIKE concat('%', articles.slug, '%') "
+                        "where log.path = concat('/article/', articles.slug) "
                         "AND status LIKE '%200%' "
                         "group by title order by views desc limit 3;"
                         )
@@ -17,9 +19,9 @@ question1 = "1. What are the most popular three articles of all time?"
 most_viewed_authors = (
                         "select authors.name, count(*) as views "
                         "from articles, log, authors "
-                        "where log.path LIKE concat('%', articles.slug, '%') "
+                        "where log.path LIKE concat('/article/', articles.slug) "
                         "AND authors.id = articles.author "
-                        "AND status LIKE '%200%' "
+                        "AND status <> ' 200 OK' "
                         "group by authors.name "
                         "order by views desc"
                       )
